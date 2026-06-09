@@ -57,22 +57,19 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <_SGVFilePath Condition="Exists('$(MSBuildProjectDirectory)\supported-game-versions.txt')">$(MSBuildProjectDirectory)\supported-game-versions.txt</_SGVFilePath>
-    <_SGVFilePath Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)\..\supported-game-versions.txt')">$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)\..\supported-game-versions.txt'))</_SGVFilePath>
+    <SGVFile>$([System.IO.File]::ReadAllText($(MSBuildProjectDirectory)/../supported-game-versions.txt))</SGVFile>
+    <SGVLineCount>$([System.Text.RegularExpressions.Regex]::Split($(SGVFile), `\r\n|\r|\n`).Length)</SGVLineCount>
+    <SGVLastEntryIndex>$([MSBuild]::Subtract($(SGVLineCount), 1))</SGVLastEntryIndex>
 
-    <_SGVRawText Condition="'$(_SGVFilePath)' != '' AND Exists('$(_SGVFilePath)')">$([System.IO.File]::ReadAllText('$(_SGVFilePath)').Trim())</_SGVRawText>
+    <FirstLine  Condition="'$(SGVLineCount)' &gt; 0">$([System.Text.RegularExpressions.Regex]::Split($(SGVFile), `\r\n|\r|\n`)[0])</FirstLine>
+    <LastLine   Condition="'$(SGVLineCount)' &gt; 0">$([System.Text.RegularExpressions.Regex]::Split($(SGVFile), `\r\n|\r|\n`)[$(SGVLastEntryIndex)])</LastLine>
 
-    <_SGVLines Condition="'$(_SGVRawText)' != ''">$(_SGVRawText.Split($([System.Environment]::NewLine)))</_SGVLines>
-
-    <_SGVFirstLine Condition="'$(_SGVLines)' != ''">$(_SGVLines.Split(';')[0].Trim())</_SGVFirstLine>
-    <_SGVLastLine Condition="'$(_SGVLines)' != ''">$(_SGVLines.Split(';')[$([MSBuild]::Add($(_SGVLines.Split(';').Length), -1))].Trim())</_SGVLastLine>
-
-    <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' != ''">$(_SGVFirstLine)</GameVersionWithPrefix>
-    <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' == ''">v1.0.0</GameVersionWithPrefix>
+    <GameVersionWithPrefix Condition="'$(FirstLine)' != ''">$(FirstLine)</GameVersionWithPrefix>
+    <GameVersionWithPrefix Condition="'$(FirstLine)' == ''">v1.0.0</GameVersionWithPrefix>
 
     <GameVersion>$(GameVersionWithPrefix.TrimStart('v'))</GameVersion>
 
-    <GameMinimalVersion Condition="'$(_SGVLastLine)' != ''">$(_SGVLastLine)</GameMinimalVersion>
+    <GameMinimalVersion Condition="'$(LastLine)' != ''">$(LastLine)</GameMinimalVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(OverrideGameVersion) != ''">

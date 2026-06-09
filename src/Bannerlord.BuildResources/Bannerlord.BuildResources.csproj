@@ -1,20 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <NuspecFile>Bannerlord.BuildResources.nuspec</NuspecFile>
-    <NuspecBasePath>$(OutputPath)</NuspecBasePath>
-    <NuspecProperties>version=$(Version);</NuspecProperties>
+    <PackageId>Bannerlord.BuildResourcesLite</PackageId>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>Bannerlord.BuildResourcesLite</PackageId>
+    <Version>1.2.0</Version>
+    <Title>Bannerlord Build Resources Lite</Title>
+    <Description>Fork of Bannerlord.BuildResources for building Bannerlord modules and tools.</Description>
+    <Authors>adwitkow; BUTR</Authors>
+    <PackageTags>bannerlord;build;msbuild</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/adwitkow/Bannerlord.BuildResourcesLite</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+  
   <ItemGroup>
-    <None Include="build\BuildResources.props" Pack="true" PackagePath="build\" />
-    <None Include="build\BuildResources.targets" Pack="true" PackagePath="build\" />
-  </ItemGroup>
+    <None Include="build\Bannerlord.BuildResourcesLite.props"
+          Pack="true"
+          PackagePath="build\" />
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Build" Version="17.10.4" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.10.4" />
+    <None Include="build\Bannerlord.BuildResourcesLite.targets"
+          Pack="true"
+          PackagePath="build\" />
   </ItemGroup>
 
 </Project>

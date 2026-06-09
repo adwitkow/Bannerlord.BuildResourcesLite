@@ -58,19 +58,19 @@
 
   <PropertyGroup>
     <_SGVFilePath Condition="Exists('$(MSBuildProjectDirectory)\supported-game-versions.txt')">$(MSBuildProjectDirectory)\supported-game-versions.txt</_SGVFilePath>
-
     <_SGVFilePath Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)\..\supported-game-versions.txt')">$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)\..\supported-game-versions.txt'))</_SGVFilePath>
 
     <_SGVRawText Condition="'$(_SGVFilePath)' != '' AND Exists('$(_SGVFilePath)')">$([System.IO.File]::ReadAllText('$(_SGVFilePath)').Trim())</_SGVRawText>
 
-    <_SGVFirstLine Condition="'$(_SGVRawText)' != ''">$([System.IO.File]::ReadAllLines('$(_SGVFilePath)')[0])</_SGVFirstLine>
+    <_SGVLines Condition="'$(_SGVRawText)' != ''">$(_SGVRawText.Split($([System.Environment]::NewLine)))</_SGVLines>
 
-    <_SGVLastLine Condition="'$(_SGVRawText)' != ''">$([System.Linq.Enumerable]::Last($([System.IO.File]::ReadAllLines('$(_SGVFilePath)'))))</_SGVLastLine>
+    <_SGVFirstLine Condition="'$(_SGVLines)' != ''">$(_SGVLines.Split(';')[0].Trim())</_SGVFirstLine>
+    <_SGVLastLine Condition="'$(_SGVLines)' != ''">$(_SGVLines.Split(';')[$([MSBuild]::Add($(_SGVLines.Split(';').Length), -1))].Trim())</_SGVLastLine>
 
     <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' != ''">$(_SGVFirstLine)</GameVersionWithPrefix>
     <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' == ''">v1.0.0</GameVersionWithPrefix>
 
-    <GameVersion Condition="'$(GameVersionWithPrefix)' != ''">$([System.String]::Copy('$(GameVersionWithPrefix)').TrimStart('v'))</GameVersion>
+    <GameVersion>$(GameVersionWithPrefix.TrimStart('v'))</GameVersion>
 
     <GameMinimalVersion Condition="'$(_SGVLastLine)' != ''">$(_SGVLastLine)</GameMinimalVersion>
   </PropertyGroup>

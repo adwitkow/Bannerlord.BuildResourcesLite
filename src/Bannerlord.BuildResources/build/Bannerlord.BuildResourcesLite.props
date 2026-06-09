@@ -57,56 +57,22 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!-- 1. Resolve file path deterministically -->
-    <_SGVFilePath Condition="Exists('$(MSBuildProjectDirectory)\supported-game-versions.txt')">
-      $(MSBuildProjectDirectory)\supported-game-versions.txt
-    </_SGVFilePath>
+    <_SGVFilePath Condition="Exists('$(MSBuildProjectDirectory)\supported-game-versions.txt')">$(MSBuildProjectDirectory)\supported-game-versions.txt</_SGVFilePath>
 
-    <_SGVFilePath Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)\..\supported-game-versions.txt')">
-      $([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)\..\supported-game-versions.txt'))
-    </_SGVFilePath>
+    <_SGVFilePath Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)\..\supported-game-versions.txt')">$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)\..\supported-game-versions.txt'))</_SGVFilePath>
 
-    <!-- 2. Read file only if it exists -->
-    <_SGVRawText Condition="Exists('$(_SGVFilePath)')">
-      $([System.IO.File]::ReadAllText('$(_SGVFilePath)'))
-    </_SGVRawText>
+    <_SGVRawText Condition="'$(_SGVFilePath)' != '' AND Exists('$(_SGVFilePath)')">$([System.IO.File]::ReadAllText('$(_SGVFilePath)').Trim())</_SGVRawText>
 
-    <!-- 3. Normalize newlines (important for MSBuild split safety) -->
-    <_SGVNormalized>
-      $([System.String]::Copy('$(_SGVRawText)').Replace('\r\n', '\n').Replace('\r', '\n'))
-    </_SGVNormalized>
+    <_SGVFirstLine Condition="'$(_SGVRawText)' != ''">$([System.IO.File]::ReadAllLines('$(_SGVFilePath)')[0])</_SGVFirstLine>
 
-    <!-- 4. First line (no regex) -->
-    <_SGVFirstLine Condition="'$(_SGVNormalized)' != '' and $([System.String]::Copy('$(_SGVNormalized)').Contains('\n'))">
-      $([System.String]::Copy('$(_SGVNormalized)').Split('\n')[0])
-    </_SGVFirstLine>
+    <_SGVLastLine Condition="'$(_SGVRawText)' != ''">$([System.Linq.Enumerable]::Last($([System.IO.File]::ReadAllLines('$(_SGVFilePath)'))))</_SGVLastLine>
 
-    <_SGVFirstLine Condition="'$(_SGVNormalized)' != '' and ! $([System.String]::Copy('$(_SGVNormalized)').Contains('\n'))">
-      $(_SGVNormalized)
-    </_SGVFirstLine>
+    <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' != ''">$(_SGVFirstLine)</GameVersionWithPrefix>
+    <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' == ''">v1.0.0</GameVersionWithPrefix>
 
-    <!-- 5. Last line -->
-    <_SGVLastLine Condition="'$(_SGVNormalized)' != ''">
-      $([System.String]::Copy('$(_SGVNormalized)').Split('\n')[ $([System.Array]::GetLength($([System.String]::Copy('$(_SGVNormalized)').Split('\n')) , 0)) - 1 ])
-    </_SGVLastLine>
+    <GameVersion Condition="'$(GameVersionWithPrefix)' != ''">$([System.String]::Copy('$(GameVersionWithPrefix)').TrimStart('v'))</GameVersion>
 
-    <!-- 6. Fallback -->
-    <GameVersionFallback>v1.0.0</GameVersionFallback>
-
-    <!-- 7. Final values -->
-    <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' != ''">
-      $(_SGVFirstLine)
-    </GameVersionWithPrefix>
-
-    <GameVersionWithPrefix Condition="'$(_SGVFirstLine)' == ''">
-      $(GameVersionFallback)
-    </GameVersionWithPrefix>
-
-    <GameVersion Condition="'$(GameVersionWithPrefix)' != ''">
-      $([System.String]::Copy('$(GameVersionWithPrefix)').Substring(1))
-    </GameVersion>
-
-    <GameMinimalVersion>$(_SGVLastLine)</GameMinimalVersion>
+    <GameMinimalVersion Condition="'$(_SGVLastLine)' != ''">$(_SGVLastLine)</GameMinimalVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(OverrideGameVersion) != ''">

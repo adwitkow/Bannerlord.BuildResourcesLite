@@ -19,6 +19,10 @@ jobs:
   publish:
     name: Publish packages
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -28,12 +32,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.x.x
-
-      # Restore (GitHub Packages auth injected via env)
+          
       - name: Restore
         run: dotnet restore src/Bannerlord.BuildResources.sln
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Build + pack
       - name: Build & Pack

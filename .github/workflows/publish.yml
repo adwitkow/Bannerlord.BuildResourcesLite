@@ -19,6 +19,27 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
+  setup:
+    using: "composite"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x.x
+
+      - uses: fabriciomurta/ensure-nuget-source@v1
+        with:
+          name: 'nuget.org'
+          url: 'https://api.nuget.org/v3/index.json'
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          source-url: https://nuget.pkg.github.com/adwitkow/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
   publish-on-nuget:
     name: Publish on NuGet
     runs-on: ubuntu-latest
@@ -32,10 +53,7 @@ jobs:
       run: >-
         dotnet build src/Bannerlord.BuildResources.MSBuild/Bannerlord.BuildResources.MSBuild.csproj --configuration Release;
         dotnet pack src/Bannerlord.BuildResources/Bannerlord.BuildResources.csproj --configuration Release -o "./packages";
-        dotnet pack src/Bannerlord.Module.Sdk/Bannerlord.Module.Sdk.csproj --configuration Release -o "./packages";
-        dotnet pack src/Bannerlord.BUTRModule.Sdk/Bannerlord.BUTRModule.Sdk.csproj --configuration Release -o "./packages";
-        dotnet pack src/Bannerlord.DataModule.Sdk/Bannerlord.DataModule.Sdk.csproj --configuration Release -o "./packages";
-
+        
     - name: Push to NuGet
       run: dotnet nuget push "./packages/*.nupkg" -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
 
@@ -43,5 +61,5 @@ jobs:
       run: |
            for f in ./packages/*.nupkg
            do
-             curl -vX PUT -u "vslee:${{secrets.GITHUB_TOKEN}}" -F package=@$f https://nuget.pkg.github.com/BUTR/
+             curl -vX PUT -u "vslee:${{secrets.GITHUB_TOKEN}}" -F package=@$f https://nuget.pkg.github.com/adwitkow/
            done

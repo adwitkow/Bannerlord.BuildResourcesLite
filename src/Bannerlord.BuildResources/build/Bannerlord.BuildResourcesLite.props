@@ -32,14 +32,4 @@
     <GameFolder Condition="!Exists($(GameFolder)) AND $(OS) == 'Unix'">~/.steam/root/steamapps/common/Mount &amp; Blade II Bannerlord</GameFolder>
   </PropertyGroup>
 
-  <!-- Local build overrides -->
-  <PropertyGroup Condition="'$(Version)' == '0.0.0.0'">
-    <ModuleId>$(ModuleId).Local</ModuleId>
-    <ModuleName>$(ModuleName) (LOCAL)</ModuleName>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <ModuleIdFlat>$([System.Text.RegularExpressions.Regex]::Replace($(ModuleId),"[^a-zA-Z0-9]","_"))</ModuleIdFlat>
-  </PropertyGroup>
-
 </Project>

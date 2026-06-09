@@ -4,6 +4,19 @@
     <TargetFramework Condition="$(TargetFrameworks) == ''">netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DllName>$(ModuleId)</DllName>
+    <SubModuleClassType>$([System.Text.RegularExpressions.Regex]::Replace($(ModuleId),"[^a-zA-Z0-9]","_"))</SubModuleClassType>
+    <ModuleIdXml>$(ModuleId)</ModuleIdXml>
+    <ModuleNameXml>$(ModuleName)</ModuleNameXml>
+  </PropertyGroup>
+
+  <!-- Local build overrides -->
+  <PropertyGroup Condition="'$(Version)' == '0.0.0.0'">
+    <ModuleIdXml>$(ModuleIdXml).Local</ModuleIdXml>
+    <ModuleNameXml>$(ModuleNameXml) (LOCAL)</ModuleNameXml>
+  </PropertyGroup>
+
   <PropertyGroup Condition="$(SGVFile) == ''">
     <SGVFile Condition="$([System.IO.File]::Exists('$(MSBuildProjectDirectory)\supported-game-versions.txt'))" >$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\supported-game-versions.txt'))</SGVFile>
     <SGVFile Condition="$([System.IO.File]::Exists('$(SolutionDir)\supported-game-versions.txt'))" >$([System.IO.File]::ReadAllText('$(SolutionDir)\supported-game-versions.txt'))</SGVFile>
@@ -88,28 +101,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <UsingTask TaskName="BuildModuleTask" AssemblyFile="$(MSBuildThisFileDirectory)\..\build\Bannerlord.BuildResources.MSBuild.dll" />
-
-  <!-- Enhance build if $(ExtendedBuild) is set, optional -->
-  <Target Name="ExtendedBuild" AfterTargets="Build" Condition="'$(ExtendedBuild)' == 'true'">
-    <BuildModuleTask
-            BasePath="$(ProjectDir)"
-            OutputPath="$(GameFolder)"
-            ModuleId="$(ModuleId)"
-            ProjectPath="$(ProjectPath)"
-            Configuration="$(Configuration)" />
-  </Target>
-
-  <!-- Publish all via pack -->
-  <Target Name="ExtendedPack" AfterTargets="Pack">
-    <BuildModuleTask
-            BasePath="$(ProjectDir)"
-            OutputPath="$(GameFolder)"
-            ModuleId="$(ModuleId)"
-            ProjectPath="$(ProjectPath)"
-            Configuration="$(Configuration)" />
-  </Target>
 
   <PropertyGroup>
     <GameBinariesFolder Condition="Exists('$(GameFolder)\bin\Win64_Shipping_Client\Bannerlord.exe')">Win64_Shipping_Client</GameBinariesFolder>
@@ -231,21 +222,25 @@
     <CopyFolder FromDirectory="$(ProjectDir)/_Module" ToDirectory="$(GameFolder)/Modules/$(ModuleId)" Regex="^.*$" Clean="false" ExcludeSourceFiles="$(ExcludeSourceFilesFromModule)" />
 
     <ItemGroup>
-      <SubModuleOverrides Include="ModuleId">
+      <SubModuleOverrides Include="ModuleIdXml">
         <Regex>\$moduleid\$</Regex>
-        <Replacement>$(ModuleId)</Replacement>
+        <Replacement>$(ModuleIdXml)</Replacement>
       </SubModuleOverrides>
-      <SubModuleOverrides Include="ModuleIdFlat">
-        <Regex>\$moduleidflat\$</Regex>
-        <Replacement>$(ModuleIdFlat)</Replacement>
-      </SubModuleOverrides>
-      <SubModuleOverrides Include="ModuleName">
+      <SubModuleOverrides Include="ModuleNameXml">
         <Regex>\$modulename\$</Regex>
-        <Replacement>$(ModuleName)</Replacement>
+        <Replacement>$(ModuleNameXml)</Replacement>
       </SubModuleOverrides>
       <SubModuleOverrides Include="Version">
         <Regex>\$version\$</Regex>
         <Replacement>$(Version)</Replacement>
+      </SubModuleOverrides>
+      <SubModuleOverrides Include="DllName">
+        <Regex>\$dllname\$</Regex>
+        <Replacement>$(DllName)</Replacement>
+      </SubModuleOverrides>
+      <SubModuleOverrides Include="SubModuleClassType">
+        <Regex>\$submoduleclasstype\$</Regex>
+        <Replacement>$(SubModuleClassType)</Replacement>
       </SubModuleOverrides>
       <SubModuleOverrides Include="ModuleUrl" Condition="$(ModuleUrl) != ''">
         <Regex>\$moduleurl\$</Regex>

@@ -57,22 +57,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <_SGVFilePath
-      Condition="Exists('$(MSBuildProjectDirectory)/supported-game-versions.txt')">
-      $(MSBuildProjectDirectory)/supported-game-versions.txt
+    <_SGVFilePath>$(MSBuildProjectDirectory)\supported-game-versions.txt</_SGVFilePath>
+
+    <_SGVFilePath Condition="!Exists('$(_SGVFilePath)')">
+      $(MSBuildProjectDirectory)\..\supported-game-versions.txt
     </_SGVFilePath>
 
-    <_SGVFilePath
-      Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)/../supported-game-versions.txt')">
-      $([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)/../supported-game-versions.txt'))
-    </_SGVFilePath>
+    <_SGVFilePath>$([System.IO.Path]::GetFullPath('$(_SGVFilePath)'))</_SGVFilePath>
 
-    <_SGVFilePath
-      Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)/../../supported-game-versions.txt')">
-      $([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)/../../supported-game-versions.txt'))
-    </_SGVFilePath>
-
-    <SGVFile Condition="'$(_SGVFilePath)' != ''">
+    <SGVFile Condition="Exists('$(_SGVFilePath)')">
       $([System.IO.File]::ReadAllText('$(_SGVFilePath)'))
     </SGVFile>
   </PropertyGroup>

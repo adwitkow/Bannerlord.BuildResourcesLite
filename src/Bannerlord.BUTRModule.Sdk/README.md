@@ -1,1 +1,0 @@
-﻿Ideally, we want on build to build against all supported versions. We created a workaround via PS script, but the best could be to invoke the CSC targets instead.

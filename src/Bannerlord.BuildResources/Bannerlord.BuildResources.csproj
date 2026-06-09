@@ -8,14 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Basic.props -->
-    <None Include="..\Shared\Basic.props" Pack="true" PackagePath="Sdk">
-      <Link>build\Basic.props</Link>
-    </None>
-    <!-- Basic.targets -->
-    <None Include="..\Shared\Basic.targets" Pack="true" PackagePath="Sdk">
-      <Link>build\Basic.targets</Link>
-    </None>
+    <None Include="build\BuildResources.props" Pack="true" PackagePath="build\" />
+    <None Include="build\BuildResources.targets" Pack="true" PackagePath="build\" />
   </ItemGroup>
 
   <ItemGroup>

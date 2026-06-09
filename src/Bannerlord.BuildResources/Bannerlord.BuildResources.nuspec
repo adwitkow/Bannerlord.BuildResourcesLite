@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
-    <id>Bannerlord.BuildResources</id>
+    <id>Bannerlord.BuildResourcesLite</id>
     <version>$version$</version>
-    <title>Bannerlord Build Resources</title>
-    <owners>Aragas</owners>
-    <authors>BUTR</authors>
-    <description>Resources for building Bannerlord modules and tools.</description>
+    <title>Bannerlord Build Resources Lite</title>
+    <owners>adwitkow</owners>
+    <authors>adwitkow, BUTR</authors>
+    <description>Fork of Bannerlord.BuildResources for building Bannerlord modules and tools.</description>
     <developmentDependency>true</developmentDependency>
     <license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <repository type="git" url="https://github.com/BUTR/Bannerlord.BuildResources.git" />
+    <repository type="git" url="https://github.com/adwitkow/Bannerlord.BuildResourcesLite.git" />
     <tags></tags>
   </metadata>
   <files>
-    <file src="_._" target="tools" />
-
-    <file src="..\Shared\Basic.props" target="build" />
-    <file src="..\Shared\Basic.targets" target="build" />
     <file src="build\*.*" target="build" />
-    <file src="buildMultiTargeting\*.*" target="buildMultiTargeting" />
   </files>
 </package>

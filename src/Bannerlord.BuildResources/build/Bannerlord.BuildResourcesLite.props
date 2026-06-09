@@ -8,6 +8,16 @@
     <OverrideAssemblyName>true</OverrideAssemblyName>
     <Version>0.0.0.0</Version>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <_ConfigDir Condition="Exists('$(MSBuildProjectDirectory)/build/BuildResources.props')">$(MSBuildProjectDirectory)/build/</_ConfigDir>
+    <_ConfigDir Condition="$(_ConfigDir) == '' AND Exists('$(MSBuildProjectDirectory)/../build/BuildResources.props')">$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)/../build/'))</_ConfigDir>
+  </PropertyGroup>
+
+  <Import Project="$(_ConfigDir)BuildResources.props"
+          Condition="Exists($(_ConfigDir)BuildResources.props)" />
+  <Import Project="$(_ConfigDir)BuildResources.local.props"
+          Condition="Exists($(_ConfigDir)BuildResources.local.props)" />
 
   <PropertyGroup>
     <BuildForWindows>true</BuildForWindows>

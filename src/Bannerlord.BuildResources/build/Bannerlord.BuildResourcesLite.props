@@ -15,9 +15,9 @@
   </PropertyGroup>
 
   <Import Project="$(_ConfigDir)BuildResources.props"
-          Condition="Exists($(_ConfigDir)BuildResources.props)" />
+          Condition="Exists('$(_ConfigDir)BuildResources.props')" />
   <Import Project="$(_ConfigDir)BuildResources.local.props"
-          Condition="Exists($(_ConfigDir)BuildResources.local.props)" />
+          Condition="Exists('$(_ConfigDir)BuildResources.local.props')" />
 
   <PropertyGroup>
     <BuildForWindows>true</BuildForWindows>

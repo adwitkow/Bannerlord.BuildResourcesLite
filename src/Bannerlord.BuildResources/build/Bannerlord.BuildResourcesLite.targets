@@ -1,9 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <Import Project="$(_ConfigDir)BuildResources.targets"
-          Condition="Exists($(_ConfigDir)BuildResources.targets)" />
+          Condition="Exists('$(_ConfigDir)BuildResources.targets')" />
   <Import Project="$(_ConfigDir)BuildResources.local.targets"
-          Condition="Exists($(_ConfigDir)BuildResources.local.targets)" />
+          Condition="Exists('$(_ConfigDir)BuildResources.local.targets')" />
 
   <!-- GitHub Actions -->
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

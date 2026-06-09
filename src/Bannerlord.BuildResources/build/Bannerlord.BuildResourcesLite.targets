@@ -4,16 +4,6 @@
     <TargetFramework Condition="$(TargetFrameworks) == ''">netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <!-- Local build overrides -->
-  <PropertyGroup Condition="'$(Version)' == '0.0.0.0'">
-    <ModuleId>$(ModuleId).Local</ModuleId>
-    <ModuleName>$(ModuleName) (LOCAL)</ModuleName>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <ModuleIdFlat>$([System.Text.RegularExpressions.Regex]::Replace($(ModuleId),"[^a-zA-Z0-9]","_"))</ModuleIdFlat>
-  </PropertyGroup>
-
   <PropertyGroup Condition="$(SGVFile) == ''">
     <SGVFile Condition="$([System.IO.File]::Exists('$(MSBuildProjectDirectory)\supported-game-versions.txt'))" >$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\supported-game-versions.txt'))</SGVFile>
     <SGVFile Condition="$([System.IO.File]::Exists('$(SolutionDir)\supported-game-versions.txt'))" >$([System.IO.File]::ReadAllText('$(SolutionDir)\supported-game-versions.txt'))</SGVFile>

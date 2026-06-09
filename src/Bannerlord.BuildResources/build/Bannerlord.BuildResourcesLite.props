@@ -56,10 +56,25 @@
     <ModuleNameXml>$(ModuleNameXml) (LOCAL)</ModuleNameXml>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(SGVFile) == ''">
-    <SGVFile Condition="$([System.IO.File]::Exists('$(MSBuildProjectDirectory)\supported-game-versions.txt'))" >$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\supported-game-versions.txt'))</SGVFile>
-    <SGVFile Condition="$([System.IO.File]::Exists('$(SolutionDir)\supported-game-versions.txt'))" >$([System.IO.File]::ReadAllText('$(SolutionDir)\supported-game-versions.txt'))</SGVFile>
-    <SGVFile Condition="$([System.IO.File]::Exists('$(SolutionDir)\..\supported-game-versions.txt'))" >$([System.IO.File]::ReadAllText('$(SolutionDir)\..\supported-game-versions.txt'))</SGVFile>
+  <PropertyGroup>
+    <_SGVFilePath
+      Condition="Exists('$(MSBuildProjectDirectory)/supported-game-versions.txt')">
+      $(MSBuildProjectDirectory)/supported-game-versions.txt
+    </_SGVFilePath>
+
+    <_SGVFilePath
+      Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)/../supported-game-versions.txt')">
+      $([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)/../supported-game-versions.txt'))
+    </_SGVFilePath>
+
+    <_SGVFilePath
+      Condition="'$(_SGVFilePath)' == '' AND Exists('$(MSBuildProjectDirectory)/../../supported-game-versions.txt')">
+      $([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)/../../supported-game-versions.txt'))
+    </_SGVFilePath>
+
+    <SGVFile Condition="'$(_SGVFilePath)' != ''">
+      $([System.IO.File]::ReadAllText('$(_SGVFilePath)'))
+    </SGVFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(OverrideGameVersion) == ''">

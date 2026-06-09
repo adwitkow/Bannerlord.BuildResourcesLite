@@ -8,7 +8,6 @@
 
   <PropertyGroup>
     <PackageId>Bannerlord.BuildResourcesLite</PackageId>
-    <Version>1.2.0</Version>
     <Title>Bannerlord Build Resources Lite</Title>
     <Description>Fork of Bannerlord.BuildResources for building Bannerlord modules and tools.</Description>
     <Authors>adwitkow; BUTR</Authors>

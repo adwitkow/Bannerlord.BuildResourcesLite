@@ -19,7 +19,8 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-  setup:
+  publish-on-nuget:
+    name: Publish on NuGet
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -39,27 +40,18 @@ jobs:
           source-url: https://nuget.pkg.github.com/adwitkow/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          
+      - name: Pack projects (Release)
+        run: >-
+          dotnet build src/Bannerlord.BuildResources.MSBuild/Bannerlord.BuildResources.MSBuild.csproj --configuration Release;
+          dotnet pack src/Bannerlord.BuildResources/Bannerlord.BuildResources.csproj --configuration Release -o "./packages";
+          
+      - name: Push to NuGet
+        run: dotnet nuget push "./packages/*.nupkg" -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
 
-  publish-on-nuget:
-    name: Publish on NuGet
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup
-      uses: butr/actions-common-setup@v2
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-
-    - name: Pack projects (Release)
-      run: >-
-        dotnet build src/Bannerlord.BuildResources.MSBuild/Bannerlord.BuildResources.MSBuild.csproj --configuration Release;
-        dotnet pack src/Bannerlord.BuildResources/Bannerlord.BuildResources.csproj --configuration Release -o "./packages";
-        
-    - name: Push to NuGet
-      run: dotnet nuget push "./packages/*.nupkg" -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
-
-    - name: Push to GPR
-      run: |
-           for f in ./packages/*.nupkg
-           do
-             curl -vX PUT -u "vslee:${{secrets.GITHUB_TOKEN}}" -F package=@$f https://nuget.pkg.github.com/adwitkow/
-           done
+      - name: Push to GPR
+        run: |
+            for f in ./packages/*.nupkg
+            do
+              curl -vX PUT -u "vslee:${{secrets.GITHUB_TOKEN}}" -F package=@$f https://nuget.pkg.github.com/adwitkow/
+            done

@@ -40,7 +40,7 @@ jobs:
       - name: Build & Pack
         run: |
           dotnet build src/Bannerlord.BuildResources.MSBuild/Bannerlord.BuildResources.MSBuild.csproj -c Release
-          dotnet pack src/Bannerlord.BuildResources/Bannerlord.BuildResources.csproj -c Release -o ./packages
+          dotnet pack src/Bannerlord.BuildResources/Bannerlord.BuildResourcesLite.Sdk.csproj -c Release -o ./packages
 
       # Push to NuGet.org
       - name: Push to NuGet.org

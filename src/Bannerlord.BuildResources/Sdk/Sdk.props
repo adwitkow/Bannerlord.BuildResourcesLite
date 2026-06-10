@@ -81,6 +81,16 @@
 
   <ItemGroup>
     <PackageReference Include="Bannerlord.ReferenceAssemblies" Version="$(GameVersion).*-*" IncludeAssets="compile" />
+    
+    <PackageReference Include="IsExternalInit" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    
+    <PackageReference Include="Nullable" Version="1.3.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <PropertyGroup Condition="$(OverrideGameVersion) != ''">

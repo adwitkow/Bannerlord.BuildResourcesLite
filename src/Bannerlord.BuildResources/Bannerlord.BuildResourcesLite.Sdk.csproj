@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <PackageId>Bannerlord.BuildResourcesLite</PackageId>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Bannerlord.BuildResourcesLite</PackageId>
+    <PackageId>Bannerlord.BuildResourcesLite.Sdk</PackageId>
     <Title>Bannerlord Build Resources Lite</Title>
     <Description>Fork of Bannerlord.BuildResources for building Bannerlord modules and tools.</Description>
     <Authors>adwitkow; BUTR</Authors>
@@ -17,13 +16,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <None Include="build\Bannerlord.BuildResourcesLite.props"
-          Pack="true"
-          PackagePath="build\" />
-
-    <None Include="build\Bannerlord.BuildResourcesLite.targets"
-          Pack="true"
-          PackagePath="build\" />
+    <None Include="Sdk\Sdk.props" Pack="true" PackagePath="Sdk\Sdk.props" />
+    <None Include="Sdk\Sdk.targets" Pack="true" PackagePath="Sdk\Sdk.targets" />
   </ItemGroup>
 
 </Project>

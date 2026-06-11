@@ -125,13 +125,13 @@
     <CopyFolder FromDirectory="$(ProjectDir)/_Module" ToDirectory="$(GameFolder)/Modules/$(ModuleId)" Regex="^.*$" Clean="false" ExcludeSourceFiles="$(ExcludeSourceFilesFromModule)" />
 
     <ItemGroup>
-      <SubModuleOverrides Include="ModuleIdXml">
+      <SubModuleOverrides Include="ModuleId">
         <Regex>\$moduleid\$</Regex>
-        <Replacement>$(ModuleIdXml)</Replacement>
+        <Replacement>$(ModuleId)</Replacement>
       </SubModuleOverrides>
-      <SubModuleOverrides Include="ModuleNameXml">
+      <SubModuleOverrides Include="ModuleName">
         <Regex>\$modulename\$</Regex>
-        <Replacement>$(ModuleNameXml)</Replacement>
+        <Replacement>$(ModuleName)</Replacement>
       </SubModuleOverrides>
       <SubModuleOverrides Include="Version">
         <Regex>\$version\$</Regex>

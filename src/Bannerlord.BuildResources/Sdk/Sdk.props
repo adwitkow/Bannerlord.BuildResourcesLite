@@ -43,17 +43,15 @@
     <GameFolder Condition="!Exists($(GameFolder)) AND $(OS) == 'Unix'">~/.steam/root/steamapps/common/Mount &amp; Blade II Bannerlord</GameFolder>
   </PropertyGroup>
 
+  <!-- Local build overrides -->
+  <PropertyGroup Condition="'$(Version)' == '0.0.0.0'">
+    <ModuleId>$(ModuleId).Local</ModuleId>
+    <ModuleName>$(ModuleName) (LOCAL)</ModuleName>
+  </PropertyGroup>
+
   <PropertyGroup>
     <DllName>$(ModuleId)</DllName>
     <SubModuleClassType>$([System.Text.RegularExpressions.Regex]::Replace($(ModuleId),"[^a-zA-Z0-9]","_"))</SubModuleClassType>
-    <ModuleIdXml>$(ModuleId)</ModuleIdXml>
-    <ModuleNameXml>$(ModuleName)</ModuleNameXml>
-  </PropertyGroup>
-
-  <!-- Local build overrides -->
-  <PropertyGroup Condition="'$(Version)' == '0.0.0.0'">
-    <ModuleIdXml>$(ModuleIdXml).Local</ModuleIdXml>
-    <ModuleNameXml>$(ModuleNameXml) (LOCAL)</ModuleNameXml>
   </PropertyGroup>
 
   <PropertyGroup>

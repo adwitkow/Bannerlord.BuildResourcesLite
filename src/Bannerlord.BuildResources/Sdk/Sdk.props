@@ -72,7 +72,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="adwitkow.Bannerlord.ReferenceAssemblies" Version="$(GameVersion).*-*" IncludeAssets="compile" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies" Version="$(GameVersion).*-*" IncludeAssets="compile" />
     
     <PackageReference Include="IsExternalInit" Version="1.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

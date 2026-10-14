@@ -310,7 +310,7 @@
                 success = true;
                 break;
             }
-            catch (System.IO.IOException ex)
+            catch (System.IO.IOException)
             {
                 if (i == retryCount - 1)
                     throw;
